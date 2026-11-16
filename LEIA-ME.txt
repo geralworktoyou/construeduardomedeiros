@@ -1,0 +1,11 @@
+PÁGINA DA CONSTRUÇÕES JOSÉ EDUARDO T. MEDEIROS
+
+Abra index.html num navegador para visualizar a página. As fotografias e o
+logótipo estão na pasta ficheiros. A página adapta-se a telemóvel e computador.
+
+O formulário abre o WhatsApp com a mensagem preenchida para +351 914 136 392.
+O visitante tem de confirmar o envio no WhatsApp. Os pedidos ainda não entram
+automaticamente no WorkToyou. O email da empresa ainda tem de ser fornecido.
+As avaliações podem ser adicionadas quando existirem comentários reais autorizados.
+A informação é editável nos ficheiros
+index.html e estilo.css. Reveja os dados e teste o envio antes de publicar.
