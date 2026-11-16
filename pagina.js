@@ -32,3 +32,14 @@ document.querySelector('.request-open').addEventListener('click',openRequest);
 document.querySelectorAll('a[href="#pedido"]').forEach(a=>a.addEventListener('click',openRequest));
 requestDialog.querySelector('.request-close').addEventListener('click',()=>requestDialog.close());
 requestDialog.addEventListener('click',event=>{if(event.target===requestDialog)requestDialog.close()});
+
+const rentalDialog=document.querySelector('#reserva'),rentalForm=document.querySelector('#rental-form'),rentalStart=rentalForm.elements.data,rentalDays=rentalForm.elements.dias,rentalEnd=document.querySelector('.rental-end');
+let rentalEquipment='';
+function localDateString(date){return [date.getFullYear(),String(date.getMonth()+1).padStart(2,'0'),String(date.getDate()).padStart(2,'0')].join('-')}
+function endDate(){const parts=rentalStart.value.split('-').map(Number),days=Number(rentalDays.value);if(parts.length!==3||!Number.isInteger(days)||days<1||days>365)return null;const date=new Date(parts[0],parts[1]-1,parts[2]);date.setDate(date.getDate()+days-1);return date}
+function showEnd(){const end=endDate();rentalEnd.textContent=end?'Último dia previsto: '+end.toLocaleDateString('pt-PT')+' (incluindo o dia de início).':''}
+document.querySelectorAll('.rental-open').forEach(button=>button.addEventListener('click',()=>{rentalForm.reset();rentalEquipment=button.dataset.equipment;document.querySelector('#reserva-equipment').textContent=rentalEquipment;rentalStart.min=localDateString(new Date());rentalEnd.textContent='';rentalDialog.showModal()}));
+rentalDialog.querySelector('.rental-close').addEventListener('click',()=>rentalDialog.close());
+rentalDialog.addEventListener('click',event=>{if(event.target===rentalDialog)rentalDialog.close()});
+rentalStart.addEventListener('input',showEnd);rentalDays.addEventListener('input',showEnd);
+rentalForm.addEventListener('submit',event=>{event.preventDefault();rentalStart.min=localDateString(new Date());if(!rentalForm.reportValidity())return;const end=endDate();if(!end)return;const data=new FormData(rentalForm),start=rentalStart.value.split('-').reverse().join('/');const message=['Olá! Gostaria de pedir uma reserva de equipamento.','','Equipamento: '+rentalEquipment,'Nome: '+String(data.get('nome')).trim(),'Data de início: '+start,'Número de dias: '+rentalDays.value,'Último dia previsto: '+end.toLocaleDateString('pt-PT'),'Local ou observações: '+(String(data.get('observacoes')).trim()||'Não indicado'),'','Aguardo confirmação da disponibilidade e orçamento.'].join('\n');const link=document.createElement('a');link.href='https://wa.me/351914136392?text='+encodeURIComponent(message);link.target='_blank';link.rel='noopener noreferrer';document.body.appendChild(link);link.click();link.remove()});
